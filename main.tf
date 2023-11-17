@@ -34,7 +34,7 @@ variable "name_suffix" {
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "rg-${name_suffix}"
+  name     = "rg-${var.name_suffix}"
   location = var.location
 }
 
