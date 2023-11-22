@@ -36,6 +36,10 @@ variable "name_suffix" {
 resource "azurerm_resource_group" "this" {
   name     = "rg-${var.name_suffix}"
   location = var.location
+  tags = {
+    source = "terraform"
+    module = "1.0.2"
+  }
 }
 
 output "resource_group" {
