@@ -37,8 +37,9 @@ resource "azurerm_resource_group" "this" {
   name     = "rg-${var.name_suffix}"
   location = var.location
   tags = {
-    source = "terraform"
-    module = "1.1.0"
+    source   = "terraform"
+    module   = "1.2.0"
+    location = var.location
   }
 }
 
