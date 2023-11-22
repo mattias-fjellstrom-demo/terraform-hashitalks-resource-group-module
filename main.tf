@@ -38,7 +38,7 @@ resource "azurerm_resource_group" "this" {
   location = var.location
   tags = {
     source = "terraform"
-    module = "1.0.2"
+    module = "1.1.0"
   }
 }
 
