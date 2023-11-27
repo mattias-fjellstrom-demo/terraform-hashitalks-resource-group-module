@@ -31,6 +31,14 @@ run "do_not_allow_us_location" {
   ]
 }
 
+run "do_not_accept_too_long_name" {
+  command = plan
+
+  variables {
+    name_suffix = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
+  }
+}
+
 run "verify_output" {
   command = apply
 
