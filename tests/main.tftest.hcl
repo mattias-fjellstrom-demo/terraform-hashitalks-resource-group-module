@@ -37,6 +37,10 @@ run "do_not_accept_too_long_name" {
   variables {
     name_suffix = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
   }
+
+  expect_failures = [
+    var.name_suffix
+  ]
 }
 
 run "verify_output" {
