@@ -18,6 +18,11 @@ variable "name_suffix" {
   description = "Resource group name suffix (i.e. rg-<NAME_SUFFIX>)"
 
   validation {
+    condition     = !can(regex("\\s+", var.name_suffix))
+    error_message = "Name suffix should not contain whitespace"
+  }
+
+  validation {
     condition     = !startswith(var.name_suffix, "rg-")
     error_message = "Do not add 'rg-' in the name, this is added automatically"
   }
@@ -26,4 +31,10 @@ variable "name_suffix" {
     condition     = length("rg-${var.name_suffix}") <= 90
     error_message = "Resource group name too long (should be between 1 and 90 characters)"
   }
+}
+
+variable "tags" {
+  type        = map(string)
+  description = "Key/value tags to add to the resource group"
+  default     = {}
 }
