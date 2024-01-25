@@ -19,7 +19,7 @@ variable "name_suffix" {
 
   validation {
     condition     = !can(regex("\\s+", var.name_suffix))
-    error_message = "Name suffix should not contain whitespace"
+    error_message = "Name suffix should not contain whitespace characters"
   }
 
   validation {
@@ -29,12 +29,26 @@ variable "name_suffix" {
 
   validation {
     condition     = length("rg-${var.name_suffix}") <= 90
-    error_message = "Resource group name too long (should be between 1 and 90 characters)"
+    error_message = "Name suffix is too long (should be at most 87 characters)"
   }
 }
 
 variable "tags" {
   type        = map(string)
   description = "Key/value tags to add to the resource group"
-  default     = {}
+
+  validation {
+    condition     = lookup(var.tags, "team", null) != null
+    error_message = "Please include a 'team' tag with your team name"
+  }
+
+  validation {
+    condition     = lookup(var.tags, "project", null) != null
+    error_message = "Please include a 'project' tag with a project name"
+  }
+
+  validation {
+    condition     = lookup(var.tags, "cost_center", null) != null
+    error_message = "Please include a 'cost_center' tag with your cost center"
+  }
 }

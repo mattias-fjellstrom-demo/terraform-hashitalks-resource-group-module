@@ -11,13 +11,13 @@ provider "azurerm" {
 run "should_set_correct_tags" {
   command = plan
 
-  variables {
-    tags     = { team = "hashitalks team" }
-    location = "westeurope"
+  assert {
+    condition     = lookup(azurerm_resource_group.this.tags, "team") == var.tags.team
+    error_message = "The 'team' tag is not set correctly"
   }
 
   assert {
-    condition     = lookup(azurerm_resource_group.this.tags, "team") == var.tags["team"]
+    condition     = lookup(azurerm_resource_group.this.tags, "cost_center") == var.tags.cost_center
     error_message = "The 'team' tag is not set correctly"
   }
 
@@ -32,7 +32,7 @@ run "should_set_correct_tags" {
   }
 
   assert {
-    condition     = lookup(azurerm_resource_group.this.tags, "project") == "hashitalks"
+    condition     = lookup(azurerm_resource_group.this.tags, "project") == var.tags.project
     error_message = "The 'project' tag is not set correctly"
   }
 }
@@ -40,12 +40,17 @@ run "should_set_correct_tags" {
 run "should_set_rg_name_prefix" {
   command = plan
 
-  variables {
-    name_suffix = "hashitalks"
-  }
-
   assert {
     condition     = startswith(azurerm_resource_group.this.name, "rg-")
     error_message = "Name prefix is not set correctly"
+  }
+}
+
+run "should_set_managed_by" {
+  command = plan
+
+  assert {
+    condition     = azurerm_resource_group.this.managed_by == "terraform"
+    error_message = "The managed_by property is not set correctly"
   }
 }

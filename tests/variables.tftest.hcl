@@ -55,3 +55,48 @@ run "should_not_allow_too_long_name_suffix" {
     var.name_suffix
   ]
 }
+
+run "should_require_project_tag" {
+  command = plan
+
+  variables {
+    tags = {
+      team        = var.tags.team
+      cost_center = var.tags.cost_center
+    }
+  }
+
+  expect_failures = [
+    var.tags,
+  ]
+}
+
+run "should_require_team_tag" {
+  command = plan
+
+  variables {
+    tags = {
+      project     = var.tags.project
+      cost_center = var.tags.cost_center
+    }
+  }
+
+  expect_failures = [
+    var.tags,
+  ]
+}
+
+run "should_require_cost_center_tag" {
+  command = plan
+
+  variables {
+    tags = {
+      cost_center = var.tags.cost_center
+      cost_center = var.tags.cost_center
+    }
+  }
+
+  expect_failures = [
+    var.tags,
+  ]
+}
