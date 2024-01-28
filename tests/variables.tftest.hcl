@@ -91,8 +91,8 @@ run "should_require_cost_center_tag" {
 
   variables {
     tags = {
-      cost_center = var.tags.cost_center
-      cost_center = var.tags.cost_center
+      project = var.tags.project
+      team    = var.tags.team
     }
   }
 
