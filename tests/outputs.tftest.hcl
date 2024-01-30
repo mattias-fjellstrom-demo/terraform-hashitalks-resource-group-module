@@ -36,3 +36,16 @@ run "output_should_contain_required_properties" {
     error_message = "Output did not have a tags field"
   }
 }
+
+run "name_output_should_follow_naming_convention" {
+  command = plan
+
+  variables {
+    name_suffix = "convention"
+  }
+
+  assert {
+    condition     = output.resource_group_name == "rg-${var.name_suffix}"
+    error_message = "Resource group name output does not follow convention"
+  }
+}
