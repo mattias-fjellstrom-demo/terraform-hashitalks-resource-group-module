@@ -6,7 +6,7 @@ provider "azurerm" {
 }
 
 // -----------------------------------------------------------------------------
-// TESTS FOR RESOURCE PROPERTIES
+// TESTS FOR RESOURCE ATTRIBUTES
 // -----------------------------------------------------------------------------
 run "should_set_correct_tags" {
   command = plan
@@ -27,6 +27,11 @@ run "should_set_correct_tags" {
   }
 
   assert {
+    condition     = lookup(azurerm_resource_group.this.tags, "provider") == "azurerm"
+    error_message = "The 'provider' tag is not set correctly"
+  }
+
+  assert {
     condition     = lookup(azurerm_resource_group.this.tags, "location") == var.location
     error_message = "The 'location' tag is not set correctly"
   }
@@ -37,7 +42,7 @@ run "should_set_correct_tags" {
   }
 }
 
-run "should_set_rg_name_prefix" {
+run "should_set_correct_name_prefix" {
   command = plan
 
   assert {
@@ -46,11 +51,44 @@ run "should_set_rg_name_prefix" {
   }
 }
 
-run "should_set_managed_by" {
+run "should_set_managed_by_attribute" {
   command = plan
 
   assert {
     condition     = azurerm_resource_group.this.managed_by == "terraform"
     error_message = "The managed_by property is not set correctly"
+  }
+}
+
+run "platform_tags_should_not_be_overwritten" {
+  command = plan
+
+  variables {
+    tags = {
+      // required tags
+      team        = "HashiTalks Team"
+      project     = "HashiTalks Project"
+      cost_center = "1234"
+
+      // platform tags
+      managed_by = "bicep"
+      provider   = "azure"
+      location   = "eastus"
+    }
+  }
+
+  assert {
+    condition     = lookup(azurerm_resource_group.this.tags, "location") == var.location
+    error_message = "The 'location' tag was overwritten by user input"
+  }
+
+  assert {
+    condition     = lookup(azurerm_resource_group.this.tags, "provider") == "azurerm"
+    error_message = "The 'provider' tag was overwritten by user input"
+  }
+
+  assert {
+    condition     = lookup(azurerm_resource_group.this.tags, "managed_by") == "terraform"
+    error_message = "The 'managed_by' tag was overwritten by user input"
   }
 }

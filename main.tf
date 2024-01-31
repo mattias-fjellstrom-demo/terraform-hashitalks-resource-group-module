@@ -4,6 +4,7 @@ resource "azurerm_resource_group" "this" {
   managed_by = "terraform"
 
   tags = merge(var.tags, {
+    provider   = "azurerm"
     managed_by = "terraform"
     location   = var.location
   })
